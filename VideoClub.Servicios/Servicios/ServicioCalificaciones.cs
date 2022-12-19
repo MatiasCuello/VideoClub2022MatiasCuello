@@ -19,6 +19,18 @@ namespace VideoClub.Servicios.Servicios
             repositorio = new RepositorioCalificaciones();
         }
 
+        public void Borrar(Calificacion calificacion)
+        {
+            try
+            {
+                repositorio.Borrar(calificacion);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool EstaRelacionado(Calificacion calificacion)
         {
             try

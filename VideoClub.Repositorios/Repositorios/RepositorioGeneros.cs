@@ -18,6 +18,19 @@ namespace VideoClub.Repositorios.Repositorios
             context = new VideoClubDbContext();
         }
 
+        public void Borrar(Genero genero)
+        {
+            try
+            {
+                context.Entry(genero).State = EntityState.Deleted;
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool EstaRelacionado(Genero genero)
         {
             return false;

@@ -134,6 +134,7 @@
     <Compile Include="Mapping\MappingProfile.cs" />
     <Compile Include="Models\Calificacion\CalificacionEditVm.cs" />
     <Compile Include="Models\Genero\GeneroEditVm.cs" />
+    <Compile Include="Models\Soporte\SoporteEditVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +261,10 @@
     <Content Include="Views\Calificacion\Edit.cshtml" />
     <Content Include="Views\Genero\Create.cshtml" />
     <Content Include="Views\Genero\Edit.cshtml" />
+    <Content Include="Views\Soporte\Create.cshtml" />
+    <Content Include="Views\Soporte\Edit.cshtml" />
+    <Content Include="Views\Calificacion\Delete.cshtml" />
+    <Content Include="Views\Genero\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -19,6 +19,18 @@ namespace VideoClub.Servicios.Servicios
             repositorio = new RepositorioGeneros();
         }
 
+        public void Borrar(Genero genero)
+        {
+            try
+            {
+                repositorio.Borrar(genero);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool EstaRelacionado(Genero genero)
         {
             try

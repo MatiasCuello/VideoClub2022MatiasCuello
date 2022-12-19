@@ -6,6 +6,7 @@ using System.Web;
 using VideoClub.Entidades.Entidades;
 using VideoClub.WebMVC.Models.Calificacion;
 using VideoClub.WebMVC.Models.Genero;
+using VideoClub.WebMVC.Models.Soporte;
 
 namespace VideoClub.WebMVC.Mapping
 {
@@ -20,6 +21,7 @@ namespace VideoClub.WebMVC.Mapping
         {
             CreateMap<Calificacion, CalificacionEditVm>().ReverseMap();
             CreateMap<Genero, GeneroEditVm>().ReverseMap();
+            CreateMap<Soporte, SoporteEditVm>().ReverseMap();
 
         }
     }

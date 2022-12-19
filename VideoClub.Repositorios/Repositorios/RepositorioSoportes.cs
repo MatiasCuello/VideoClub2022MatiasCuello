@@ -85,5 +85,18 @@ namespace VideoClub.Repositorios.Repositorios
                 throw new Exception(e.Message);
             }
         }
+
+        public void Borrar(Soporte soporte)
+        {
+            try
+            {
+                context.Entry(soporte).State = EntityState.Deleted;
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace VideoClub.Repositorios.Repositorios.Facades
         void Guardar(Soporte soporte);
         bool Existe(Soporte soporte);
         bool EstaRelacionado(Soporte soporte);
+        void Borrar(Soporte soporte);
     }
 }

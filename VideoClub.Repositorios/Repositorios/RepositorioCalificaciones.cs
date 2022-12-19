@@ -18,6 +18,19 @@ namespace VideoClub.Repositorios.Repositorios
             context = new VideoClubDbContext();
         }
 
+        public void Borrar(Calificacion calificacion)
+        {
+            try
+            {
+                context.Entry(calificacion).State = EntityState.Deleted;
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public bool EstaRelacionado(Calificacion calificacion)
         {
             return false;

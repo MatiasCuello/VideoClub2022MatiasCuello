@@ -101,5 +101,47 @@ namespace VideoClub.WebMVC.Controllers
                 return View(generoEditVm);
             }
         }
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+            Genero genero = servicio.GetGeneroPorId(id.Value);
+            if (genero == null)
+            {
+                return HttpNotFound("El codigo del genero no existe!");
+            }
+
+            GeneroEditVm calificacionEditVm = mapper.Map<GeneroEditVm>(genero);
+            return View(calificacionEditVm);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            Genero genero = servicio.GetGeneroPorId(id);
+            try
+            {
+                if (servicio.EstaRelacionado(genero))
+                {
+                    GeneroEditVm generoEditVm = mapper.Map<GeneroEditVm>(genero);
+                    ModelState.AddModelError(string.Empty, "Genero relacionado!");
+                    return View(generoEditVm);
+                }
+
+                servicio.Borrar(genero);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                GeneroEditVm generoEditVm = mapper.Map<GeneroEditVm>(genero);
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(generoEditVm);
+            }
+        }
     }
 }

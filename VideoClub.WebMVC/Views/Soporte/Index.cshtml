@@ -37,7 +37,7 @@ else
 <tr>
     <td>@Html.DisplayFor(modelItem => soporte.Descripcion)</td>
     <td>
-        @Html.ActionLink("Editar", "#", null, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Editar", "Edit", new { id = soporte.SoporteId }, new { @class = "btn btn-warning" })
         @Html.ActionLink("Borrar", "#", null, new { @class = "btn btn-danger" })
 
     </td>

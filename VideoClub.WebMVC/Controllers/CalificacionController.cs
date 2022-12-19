@@ -24,8 +24,6 @@ namespace VideoClub.WebMVC.Controllers
             mapper = AutoMapperConfig.Mapper;
         }
 
-
-
         public ActionResult Index()
         {
             var lista = servicio.GetLista();
@@ -101,6 +99,49 @@ namespace VideoClub.WebMVC.Controllers
             }
             catch (Exception e)
             {
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(calificacionEditVm);
+            }
+        }
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+            Calificacion calificacion = servicio.GetCalificacionPorId(id.Value);
+            if (calificacion == null)
+            {
+                return HttpNotFound("El codigo de la calificacion no existe!");
+            }
+
+            CalificacionEditVm calificacionEditVm = mapper.Map<CalificacionEditVm>(calificacion);
+            return View(calificacionEditVm);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            Calificacion calificacion = servicio.GetCalificacionPorId(id);
+            try
+            {
+                if (servicio.EstaRelacionado(calificacion))
+                {
+                    CalificacionEditVm calificacionEditVm = mapper.Map<CalificacionEditVm>(calificacion);
+                    ModelState.AddModelError(string.Empty, "Calificacion relacionada!");
+                    return View(calificacionEditVm);
+                }
+
+                servicio.Borrar(calificacion);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                CalificacionEditVm calificacionEditVm = mapper.Map<CalificacionEditVm>(calificacion);
                 ModelState.AddModelError(string.Empty, e.Message);
                 return View(calificacionEditVm);
             }

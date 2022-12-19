@@ -14,6 +14,6 @@ namespace VideoClub.Repositorios.Repositorios.Facades
         void Guardar(Calificacion calificacion);
         bool Existe(Calificacion calificacion);
         bool EstaRelacionado(Calificacion calificacion);
-
+        void Borrar(Calificacion calificacion);
     }
 }

@@ -14,5 +14,6 @@ namespace VideoClub.Servicios.Servicios.Facades
         void Guardar(Genero genero);
         bool Existe(Genero genero);
         bool EstaRelacionado(Genero genero);
+        void Borrar(Genero genero);
     }
 }
