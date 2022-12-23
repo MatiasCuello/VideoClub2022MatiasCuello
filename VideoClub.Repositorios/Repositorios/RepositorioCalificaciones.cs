@@ -11,11 +11,11 @@ namespace VideoClub.Repositorios.Repositorios
 {
     public class RepositorioCalificaciones : IRepositorioCalificaciones
     {
-        private readonly VideoClubDbContext context;
+        private VideoClubDbContext context;
 
-        public RepositorioCalificaciones()
+        public RepositorioCalificaciones(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+            this.context = context;
         }
 
         public void Borrar(Calificacion calificacion)
@@ -23,7 +23,7 @@ namespace VideoClub.Repositorios.Repositorios
             try
             {
                 context.Entry(calificacion).State = EntityState.Deleted;
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -88,10 +88,14 @@ namespace VideoClub.Repositorios.Repositorios
                 }
                 else
                 {
-                    context.Entry(calificacion).State = EntityState.Modified;
+                    var calificacionInDb = context.Calificaciones
+                        .SingleOrDefault(c => c.CalificacionId == calificacion.CalificacionId);
+                    calificacionInDb.CalificacionId = calificacion.CalificacionId;
+                    calificacionInDb.Descripcion = calificacion.Descripcion;
+                    context.Entry(calificacionInDb).State = EntityState.Modified;
                 }
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {

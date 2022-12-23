@@ -11,11 +11,11 @@ namespace VideoClub.Repositorios.Repositorios
 {
     public class RepositorioGeneros : IRepositorioGeneros
     {
-        private readonly VideoClubDbContext context;
+        private VideoClubDbContext context;
 
-        public RepositorioGeneros()
+        public RepositorioGeneros(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+            this.context = context;
         }
 
         public void Borrar(Genero genero)
@@ -23,7 +23,7 @@ namespace VideoClub.Repositorios.Repositorios
             try
             {
                 context.Entry(genero).State = EntityState.Deleted;
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -89,10 +89,14 @@ namespace VideoClub.Repositorios.Repositorios
                 }
                 else
                 {
-                    context.Entry(genero).State = EntityState.Modified;
+                    var generoInDb = context.Generos
+                        .SingleOrDefault(g => g.GeneroId == genero.GeneroId);
+                    generoInDb.GeneroId = genero.GeneroId;
+                    generoInDb.Descripcion = genero.Descripcion;
+                    context.Entry(generoInDb).State = EntityState.Modified;
                 }
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {

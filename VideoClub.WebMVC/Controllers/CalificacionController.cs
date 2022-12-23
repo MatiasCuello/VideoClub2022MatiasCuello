@@ -18,9 +18,9 @@ namespace VideoClub.WebMVC.Controllers
         // GET: Calificacion
         private readonly IServicioCalificaciones servicio;
         private readonly IMapper mapper;
-        public CalificacionController()
+        public CalificacionController(ServicioCalificaciones servicio)
         {
-            servicio = new ServicioCalificaciones();
+            this.servicio = servicio;
             mapper = AutoMapperConfig.Mapper;
         }
 

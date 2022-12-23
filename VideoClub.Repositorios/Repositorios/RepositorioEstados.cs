@@ -11,11 +11,11 @@ namespace VideoClub.Repositorios.Repositorios
 {
     public class RepositorioEstados : IRepositorioEstados
     {
-        private readonly VideoClubDbContext context;
+        private VideoClubDbContext context;
 
-        public RepositorioEstados()
+        public RepositorioEstados(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+            this.context = context;
         }
 
         public bool EstaRelacionado(Estado estado)
@@ -75,10 +75,14 @@ namespace VideoClub.Repositorios.Repositorios
                 }
                 else
                 {
-                    context.Entry(estado).State = EntityState.Modified;
+                    var estadoInDb = context.Estados
+                        .SingleOrDefault(e => e.EstadoId == estado.EstadoId);
+                    estadoInDb.EstadoId = estado.EstadoId;
+                    estadoInDb.Descripcion = estado.Descripcion;
+                    context.Entry(estadoInDb).State = EntityState.Modified;
                 }
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
+using VideoClub.Repositorios;
 using VideoClub.Repositorios.Repositorios;
 using VideoClub.Repositorios.Repositorios.Facades;
 using VideoClub.Servicios.Servicios.Facades;
@@ -13,10 +14,14 @@ namespace VideoClub.Servicios.Servicios
     public class ServicioEstados:IServicioEstados
     {
         private readonly IRepositorioEstados repositorio;
+        private readonly VideoClubDbContext context;
+        private readonly UnitOfWork unitOfWork;
 
-        public ServicioEstados()
+        public ServicioEstados(RepositorioEstados repositorio, VideoClubDbContext context, UnitOfWork unitOfWork)
         {
-            repositorio = new RepositorioEstados();
+            this.repositorio = repositorio;
+            this.context = context;
+            this.unitOfWork = unitOfWork;
         }
 
         public bool EstaRelacionado(Estado estado)
@@ -73,6 +78,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Guardar(estado);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
+using VideoClub.Repositorios;
 using VideoClub.Repositorios.Repositorios;
 using VideoClub.Repositorios.Repositorios.Facades;
 using VideoClub.Servicios.Servicios.Facades;
@@ -13,10 +14,14 @@ namespace VideoClub.Servicios.Servicios
     public class ServicioGeneros:IServicioGeneros
     {
         private readonly IRepositorioGeneros repositorio;
+        private readonly VideoClubDbContext context;
+        private readonly UnitOfWork unitOfWork;
 
-        public ServicioGeneros()
+        public ServicioGeneros(RepositorioGeneros repositorio, VideoClubDbContext context, UnitOfWork unitOfWork)
         {
-            repositorio = new RepositorioGeneros();
+            this.repositorio = repositorio;
+            this.context = context;
+            this.unitOfWork = unitOfWork;
         }
 
         public void Borrar(Genero genero)
@@ -24,6 +29,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Borrar(genero);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {
@@ -85,6 +91,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Guardar(genero);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {

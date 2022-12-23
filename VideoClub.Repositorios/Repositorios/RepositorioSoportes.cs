@@ -11,12 +11,13 @@ namespace VideoClub.Repositorios.Repositorios
 {
     public class RepositorioSoportes : IRepositorioSoportes
     {
-        private readonly VideoClubDbContext context;
+        private VideoClubDbContext context;
 
-        public RepositorioSoportes()
+        public RepositorioSoportes(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+           this.context = context;
         }
+
 
         public bool EstaRelacionado(Soporte soporte)
         {
@@ -75,10 +76,14 @@ namespace VideoClub.Repositorios.Repositorios
                 }
                 else
                 {
-                    context.Entry(soporte).State = EntityState.Modified;
+                    var soporteInDb = context.Soportes
+                        .SingleOrDefault(s => s.SoporteId == soporte.SoporteId);
+                    soporteInDb.SoporteId = soporte.SoporteId;
+                    soporteInDb.Descripcion = soporte.Descripcion;
+                    context.Entry(soporteInDb).State = EntityState.Modified;
                 }
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -91,7 +96,7 @@ namespace VideoClub.Repositorios.Repositorios
             try
             {
                 context.Entry(soporte).State = EntityState.Deleted;
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {

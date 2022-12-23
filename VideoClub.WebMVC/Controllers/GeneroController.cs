@@ -18,9 +18,9 @@ namespace VideoClub.WebMVC.Controllers
         // GET: Genero
         private readonly IServicioGeneros servicio;
         private readonly IMapper mapper;
-        public GeneroController()
+        public GeneroController(ServicioGeneros servicio)
         {
-            servicio = new ServicioGeneros();
+            this.servicio = servicio;
             mapper = AutoMapperConfig.Mapper;
         }
         public ActionResult Index()

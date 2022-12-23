@@ -13,10 +13,15 @@ namespace VideoClub.Servicios.Servicios
     public class ServicioPeliculas : IServicioPeliculas
     {
         private readonly RepositorioPeliculas repositorio;
+        private readonly VideoClubDbContext context;
+        private readonly UnitOfWork unitOfWork;
 
-        public ServicioPeliculas()
+        public ServicioPeliculas(RepositorioPeliculas repositorio,VideoClubDbContext context,UnitOfWork unitOfWork)
         {
-            repositorio = new RepositorioPeliculas();
+            this.repositorio = repositorio;
+            this.context = context;
+            this.unitOfWork = unitOfWork;
+
         }
 
         public List<Pelicula> GetLista(Calificacion calificacion, Estado estado, Genero genero, Soporte soporte)
@@ -37,6 +42,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Guardar(pelicula);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {
@@ -48,6 +54,8 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Borrar(peliculaId);
+                unitOfWork.Save();
+                
             }
             catch (Exception e)
             {

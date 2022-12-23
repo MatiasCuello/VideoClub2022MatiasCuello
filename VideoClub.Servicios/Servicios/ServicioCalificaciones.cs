@@ -1,10 +1,11 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoClub.Entidades.Entidades;
-using VideoClub.Repositorios.Repositorios;
+    using VideoClub.Repositorios;
+    using VideoClub.Repositorios.Repositorios;
 using VideoClub.Repositorios.Repositorios.Facades;
 using VideoClub.Servicios.Servicios.Facades;
 
@@ -13,10 +14,15 @@ namespace VideoClub.Servicios.Servicios
     public class ServicioCalificaciones : IServicioCalificaciones
     {
         private readonly IRepositorioCalificaciones repositorio;
+        private readonly VideoClubDbContext context;
+        private readonly UnitOfWork unitOfWork;
 
-        public ServicioCalificaciones()
+        public ServicioCalificaciones(RepositorioCalificaciones repositorio,VideoClubDbContext context, UnitOfWork unitOfWork)
         {
-            repositorio = new RepositorioCalificaciones();
+            this.repositorio = repositorio;
+            this.context = context;
+            this.unitOfWork = unitOfWork;
+
         }
 
         public void Borrar(Calificacion calificacion)
@@ -24,6 +30,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Borrar(calificacion);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {
@@ -85,6 +92,7 @@ namespace VideoClub.Servicios.Servicios
             try
             {
                 repositorio.Guardar(calificacion);
+                unitOfWork.Save();
             }
             catch (Exception e)
             {

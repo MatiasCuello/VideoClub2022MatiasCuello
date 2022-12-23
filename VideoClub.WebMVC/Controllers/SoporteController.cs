@@ -18,9 +18,9 @@ namespace VideoClub.WebMVC.Controllers
         // GET: Soporte
         private readonly IServicioSoportes servicio;
         private readonly IMapper mapper;
-        public SoporteController()
+        public SoporteController(ServicioSoportes servicio)
         {
-            servicio = new ServicioSoportes();
+            this.servicio = servicio;
             mapper = AutoMapperConfig.Mapper;
         }
         public ActionResult Index()
@@ -98,6 +98,48 @@ namespace VideoClub.WebMVC.Controllers
             }
             catch (Exception e)
             {
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(soporteEditVm);
+            }
+        }
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            }
+
+            Soporte soporte = servicio.GetSoportePorId(id.Value);
+            if (soporte == null)
+            {
+                return HttpNotFound("El codigo de la calificacion no existe!");
+            }
+
+            SoporteEditVm soporteEditVm = mapper.Map<SoporteEditVm>(soporte);
+            return View(soporteEditVm);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            Soporte soporte = servicio.GetSoportePorId(id);
+            try
+            {
+                if (servicio.EstaRelacionado(soporte))
+                {
+                    SoporteEditVm soporteEditVm = mapper.Map<SoporteEditVm>(soporte);
+                    ModelState.AddModelError(string.Empty, "Soporte relacionada!");
+                    return View(soporteEditVm);
+                }
+
+                servicio.Borrar(soporte);
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                SoporteEditVm soporteEditVm = mapper.Map<SoporteEditVm>(soporte);
                 ModelState.AddModelError(string.Empty, e.Message);
                 return View(soporteEditVm);
             }

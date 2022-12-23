@@ -10,11 +10,11 @@ namespace VideoClub.Repositorios.Repositorios.Facades
 {
     public class RepositorioPeliculas:IRepositorioPeliculas
     {
-        private readonly VideoClubDbContext context;
+        private VideoClubDbContext context;
 
-        public RepositorioPeliculas()
+        public RepositorioPeliculas(VideoClubDbContext context)
         {
-            context = new VideoClubDbContext();
+            this.context = context;
         }
    
 
@@ -30,7 +30,7 @@ namespace VideoClub.Repositorios.Repositorios.Facades
                 }
 
                 context.Entry(peliculaEnDb).State = EntityState.Deleted;
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {
@@ -142,7 +142,7 @@ namespace VideoClub.Repositorios.Repositorios.Facades
 
                 }
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
             catch (Exception e)
             {
