@@ -30,9 +30,15 @@ namespace VideoClub.WebMVC.Controllers
         }
         // GET: Pelicula
         public ActionResult Index()
+        { 
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult ListarPeliculas()
         {
             var lista = servicio.GetLista(null,null,null,null);
-            return View();
+            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
         }
     }
 }

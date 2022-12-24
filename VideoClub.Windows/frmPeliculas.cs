@@ -33,7 +33,7 @@ namespace VideoClub.Windows
 
         private void frmPeliculas_Load(object sender, EventArgs e)
         {
-            servicio = new ServicioPeliculas();
+            servicio = new ServicioPeliculas(null,null,null);
             RecargarGrilla();
         }
 

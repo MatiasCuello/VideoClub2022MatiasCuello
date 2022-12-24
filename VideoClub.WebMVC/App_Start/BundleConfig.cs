@@ -12,8 +12,12 @@ namespace VideoClub.WebMVC
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new Bundle("~/bundles/complementos").Include(
+                "~/Scripts/DataTables/jquery.dataTables.js",
+                "~/Scripts/DataTables/dataTables.responsive.js",
                 "~/Scripts/fontawesome/all.min.js",
-                "~/Scripts/scripts.js"));
+                "~/Scripts/scripts.js"
+            ));
+
 
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
@@ -27,7 +31,12 @@ namespace VideoClub.WebMVC
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/Site.css"));
+                "~/Content/DataTables/css/jquery.dataTables.css",
+                "~/Content/DataTables/css/responsive.dataTables.css",
+                "~/Content/bootstrap.css",
+                "~/Content/PagedList.css",
+                "~/Content/site.css"));
+
         }
     }
 }

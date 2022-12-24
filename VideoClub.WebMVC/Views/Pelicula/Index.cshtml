@@ -1,0 +1,109 @@
+﻿@model List<VideoClub.Entidades.Entidades.Pelicula>
+@{ ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<ol class="breadcrumb mt-4 mb-4 ">
+    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+    <li class="breadcrumb-item active">Peliculas</li>
+</ol>
+<div class="card">
+    <h5 class="card-header bg-dark text-white">
+        <i class="fas fa-film"></i>
+        Listado de Peliculas
+
+    </h5>
+    <div class="card-body">
+        <button type="button">Nuevo</button>
+        <hr />
+        <table id="tabla" class="table display cell-border" style="width: 100%">
+            <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Genero</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Duracion</th>
+                <th>Calificacion</th>
+                <th>Soporte</th>
+                <th>Alquilado</th>
+                <th>Activo</th>
+                <th></th>
+            </tr>  
+            </thead>
+            <tbody>
+         
+            </tbody>
+        </table>
+
+    </div>
+    @*<div class="card-footer text-muted">
+        Cantidad de registros: <strong>@Model.Count</strong>
+    </div>*@
+</div>
+@section scripts
+{
+    <script>
+        var tablaProvincias;
+
+
+        @*jQuery.ajax({
+            url: "@Url.Action("ListarPeliculas", "Pelicula")",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(data) {
+                debugger;
+                console.log(data);
+            }
+        });*@
+        tablaProvincias = $("#tabla").DataTable({
+            responsive: "true",
+            ordering: "false",
+            "ajax": {
+                url: "@Url.Action("ListarPeliculas", "Pelicula")",
+                type: "GET",
+                dataType: "json"
+            },
+            "columns": [
+                { "data": "Titulo" },
+                { "data": "Genero.Descripcion" },
+                { "data": "FechaIncorporacion" },
+                { "data": "Estado.Descripcion" },
+                { "data": "DuracionEnMinutos" },
+                { "data": "Calificacion.Descripcion" },
+                { "data": "Soporte.Descripcion" },
+                {
+                    "data": "Alquilado",
+                    render: function(valorDeAlquilado) {
+                        if (valorDeAlquilado) {
+                            return '<span class="badge text-bg-success">SI</span>';
+                        } else {
+                            return '<span class="badge text-bg-danger">NO</span>';
+
+                        }
+                    }
+                },
+                {
+                    "data": "Activa",
+                    render: function(valorDeActiva) {
+                        if (valorDeActiva) {
+                            return '<span class="badge text-bg-success">SI</span>';
+                        } else {
+                            return '<span class="badge text-bg-danger">NO</span>';
+
+                        }
+                    }
+                },
+                {
+                    "defaultContent": '<button type="button" class="btn btn-warning mx-3 btn-sm btn-editar"><i class="fas fa-pen"></i></button>' +
+                        '<button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>',
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "90px"
+
+                }
+            ]
+
+        });
+    </script>
+}

@@ -19,7 +19,7 @@ namespace VideoClub.WebMVC.Models.Pelicula
         [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar un Genero")]
         public int GeneroId { get; set; }
 
-
+        [DisplayName("Fecha")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
         public DateTime FechaIncorporacion { get; set; } = DateTime.Now;
 
