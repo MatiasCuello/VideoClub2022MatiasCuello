@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
+using VideoClub.Servicios.Servicios;
 using VideoClub.Servicios.Servicios.Facades;
+using VideoClub.WebMVC.App_Start;
 
 namespace VideoClub.WebMVC.Controllers
 {
@@ -15,10 +17,10 @@ namespace VideoClub.WebMVC.Controllers
         private readonly IServicioEstados servicio;
         private readonly IMapper mapper;
 
-        public EstadoController(IServicioEstados servicio, IMapper mapper)
+        public EstadoController(ServicioEstados servicio)
         {
             this.servicio = servicio;
-            this.mapper = mapper;   
+            mapper = AutoMapperConfig.Mapper;
         }
         // GET: Pelicula
         [HttpGet]

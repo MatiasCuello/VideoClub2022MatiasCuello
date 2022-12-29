@@ -247,13 +247,14 @@
                 success: function (estados) {
                     console.log(estados);
                     debugger;
-                    $("#cboEstado").append('<option disabled value="0">'
-                        + "Seleccionar" + '</option>');
+                    $("#cboEstado").append('<option disabled value="0">' + "Seleccionar" + '</option>');
                     $.each(estados.data,
                         function (index, estado) {
                             $("#cboEstado").append('<option value="' +
-                                estado.EstadoId + '">' +
-                                estado.Descripcion + '</option>');
+                                estado.EstadoId +
+                                '">' +
+                                estado.Descripcion +
+                                '</option>');
                         });
 
                 }
