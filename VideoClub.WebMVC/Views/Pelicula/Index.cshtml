@@ -1,7 +1,6 @@
 ﻿@model List<VideoClub.Entidades.Entidades.Pelicula>
 @{ ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 <ol class="breadcrumb mt-4 mb-4 ">
     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
     <li class="breadcrumb-item active">Peliculas</li>
@@ -13,38 +12,111 @@
 
     </h5>
     <div class="card-body">
-        <button type="button">Nuevo</button>
+        <button type="button" class="btn btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Nuevo</button>
         <hr />
         <table id="tabla" class="table display cell-border" style="width: 100%">
             <thead>
-            <tr>
-                <th>Titulo</th>
-                <th>Genero</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Duracion</th>
-                <th>Calificacion</th>
-                <th>Soporte</th>
-                <th>Alquilado</th>
-                <th>Activo</th>
-                <th></th>
-            </tr>  
+                <tr>
+                    <th>Titulo</th>
+                    <th>Genero</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Duracion(min)</th>
+                    <th>Calificacion</th>
+                    <th>Soporte</th>
+                    <th>Alquilado</th>
+                    <th>Activo</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-         
             </tbody>
         </table>
 
     </div>
-    @*<div class="card-footer text-muted">
-        Cantidad de registros: <strong>@Model.Count</strong>
-    </div>*@
+</div>
+<!-- Modal -->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Peliculas</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtPeliculaId" value="0" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="txtTitulo" class="form-label">Titulo</label>
+                        <input type="text" class="form-control" id="txtTitulo" placeholder="Titulo de la pelicula">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboGenero" class="form-label">Genero</label>
+
+                        <select id="cboGenero" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboEstado" class="form-label">Estado</label>
+
+                        <select id="cboEstado" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="txtDuracion" class="form-label">Duracion(min)</label>
+                        <input type="text" class="form-control" id="txtDuracion" placeholder="Duracion en minutos">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboCalificacion" class="form-label">Calificacion</label>
+
+                        <select id="cboCalificacion" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboSoporte" class="form-label">Soporte</label>
+
+                        <select id="cboSoporte" class="form-select" aria-label="Default select example">
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboAlquilado" class="form-label">Alquilado</label>
+
+                        <select id="cboAlquilado" class="form-select" aria-label="Default select example">
+                            <option value="0">NO</option>
+                            <option value="1">SI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cboActiva" class="form-label">Activa</label>
+
+                        <select id="cboActiva" class="form-select" aria-label="Default select example">
+                            <option value="1">SI</option>
+                            <option value="0">NO</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div id="mensajeError" class="alert alert-danger" role="alert">
+                            A simple danger alert—check it out!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
 </div>
 @section scripts
 {
     <script>
-        var tablaProvincias;
-
+        var tablaPeliculas;
+        
 
         @*jQuery.ajax({
             url: "@Url.Action("ListarPeliculas", "Pelicula")",
@@ -54,56 +126,219 @@
             success: function(data) {
                 debugger;
                 console.log(data);
-            }
-        });*@
-        tablaProvincias = $("#tabla").DataTable({
-            responsive: "true",
-            ordering: "false",
-            "ajax": {
-                url: "@Url.Action("ListarPeliculas", "Pelicula")",
+               }
+                });*@
+
+        $(document).ready(function() {
+            cargarTabla();
+            cargarCboGeneros();
+            cargarCboEstados();
+            cargarCboSoportes();
+            cargarCboCalificaciones();
+        });
+
+        function cargarTabla() {
+            tablaPeliculas = $("#tabla").DataTable({
+                responsive: "true",
+                ordering: "false",
+                "ajax": {
+                    url: "@Url.Action("ListarPeliculas", "Pelicula")",
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [
+                    { "data": "Titulo" },
+                    {
+                        "data": "Genero"
+                        ,
+                        render: function(data) {
+                            return data.Descripcion;
+                        }
+                    },
+                    {
+                        "data": "FechaIncorporacion"
+                    },
+                    {
+                        "data": "Estado"
+                        ,
+                        render: function(data) {
+                            return data.Descripcion;
+                        }
+                    },
+                    { "data": "DuracionEnMinutos" },
+                    {
+                        "data": "Calificacion"
+                        ,
+                        render: function(data) {
+                            return data.Descripcion;
+                        }
+                    },
+                    {
+                        "data": "Soporte"
+                        ,
+                        render: function(data) {
+                            return data.Descripcion;
+                        }
+                    },
+                    {
+                        "data": "Alquilado",
+                        render: function(valorDeAlquilado) {
+                            if (valorDeAlquilado) {
+                                return '<span class="badge text-bg-success">SI</span>';
+                            } else {
+                                return '<span class="badge text-bg-danger">NO</span>';
+                            }
+                        }
+                    },
+                    {
+                        "data": "Activa",
+                        render: function(valorDeActiva) {
+                            if (valorDeActiva) {
+                                return '<span class="badge text-bg-success">SI</span>';
+                            } else {
+                                return '<span class="badge text-bg-danger">NO</span>';
+
+                            }
+                        }
+                    },
+                    {
+                        "defaultContent":
+                            '<button type="button" class="btn btn-warning mx-3 btn-sm btn-editar"><i class="fas fa-pen"></i></button>' +
+                                '<button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>',
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "90px"
+
+                    }
+                ]
+
+            });
+        }
+
+        function cargarCboGeneros() {
+            jQuery.ajax({
+                url: "@Url.Action("ListarGeneros", "Genero")",
                 type: "GET",
-                dataType: "json"
-            },
-            "columns": [
-                { "data": "Titulo" },
-                { "data": "Genero.Descripcion" },
-                { "data": "FechaIncorporacion" },
-                { "data": "Estado.Descripcion" },
-                { "data": "DuracionEnMinutos" },
-                { "data": "Calificacion.Descripcion" },
-                { "data": "Soporte.Descripcion" },
-                {
-                    "data": "Alquilado",
-                    render: function(valorDeAlquilado) {
-                        if (valorDeAlquilado) {
-                            return '<span class="badge text-bg-success">SI</span>';
-                        } else {
-                            return '<span class="badge text-bg-danger">NO</span>';
-
-                        }
-                    }
-                },
-                {
-                    "data": "Activa",
-                    render: function(valorDeActiva) {
-                        if (valorDeActiva) {
-                            return '<span class="badge text-bg-success">SI</span>';
-                        } else {
-                            return '<span class="badge text-bg-danger">NO</span>';
-
-                        }
-                    }
-                },
-                {
-                    "defaultContent": '<button type="button" class="btn btn-warning mx-3 btn-sm btn-editar"><i class="fas fa-pen"></i></button>' +
-                        '<button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>',
-                    "orderable": false,
-                    "searchable": false,
-                    "width": "90px"
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(generos) {
+                    console.log(generos);
+                    debugger;
+                    $("#cboGenero").append('<option disabled value="0">' + "Seleccionar" + '</option>');
+                    $.each(generos.data,
+                        function(index, genero) {
+                            $("#cboGenero").append('<option value="' +
+                                genero.GeneroId +
+                                '">' +
+                                genero.Descripcion +
+                                '</option>');
+                        });
 
                 }
-            ]
+            });
+        }
 
-        });
+        function cargarCboEstados() {
+            jQuery.ajax({
+                url: "@Url.Action("ListarEstados", "Estado")",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (estados) {
+                    console.log(estados);
+                    debugger;
+                    $("#cboEstado").append('<option disabled value="0">'
+                        + "Seleccionar" + '</option>');
+                    $.each(estados.data,
+                        function (index, estado) {
+                            $("#cboEstado").append('<option value="' +
+                                estado.EstadoId + '">' +
+                                estado.Descripcion + '</option>');
+                        });
+
+                }
+            }); 
+        }
+
+        function cargarCboSoportes() {
+            jQuery.ajax({
+                url: "@Url.Action("ListarSoportes", "Soporte")",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(soportes) {
+                    console.log(soportes);
+                   debugger;
+                    $("#cboSoporte").append('<option disabled value="0">' + "Seleccionar" + '</option>');
+                    $.each(soportes.data,
+                        function(index, soporte) {
+                            $("#cboSoporte").append('<option value="' +
+                                soporte.SoporteId +
+                                '">' +
+                                soporte.Descripcion +
+                                '</option>');
+                        });
+
+                }
+            });
+
+
+        }
+
+        function cargarCboCalificaciones() {
+            jQuery.ajax({
+                url: "@Url.Action("ListarCalificaciones", "Calificacion")",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (calificaciones) {
+                    console.log(calificaciones);
+                    debugger;
+                    $("#cboCalificacion").append('<option disabled value="0">'
+                        + "Seleccionar" + '</option>');
+                    $.each(calificaciones.data,
+                        function (index, calificacion) {
+                            $("#cboCalificacion").append('<option value="' +
+                                calificacion.CalificacionId + '">' +
+                                calificacion.Descripcion + '</option>');
+                        });
+
+                }
+            }); 
+            }
+    
+        function abrirModal(jsonPelicula) {
+
+            $("#mensajeError").hide();
+            $("#txtPeliculaId").val(0);
+            $("#txtTitulo").val("");
+            $("#cboGenero").val($("#cboGenero option:first").val());
+            $("#cboEstado").val($("#cboEstado option:first").val());
+            $("#txtDuracion").val("");
+            $("#cboCalificacion").val($("#cboCalificacion option:first").val());
+            $("#cboSoporte").val($("#cboSoporte option:first").val());
+            $("#cboAlquilado").val(0);
+            $("#cboActiva").val(1);
+            if (jsonPelicula != null) {
+
+                $("#txtPeliculaId").val(jsonPelicula.PeliculaId);
+                $("#txtTitulo").val(jsonPelicula.Titulo);
+                $("#cboGenero").val(jsonPelicula.GeneroId);
+                $("#txtDuracion").val(jsonPelicula.DuracionEnMinutos);
+                $("#cboEstado").val(jsonPelicula.EstadoId);
+                $("#cboCalificacion").val(jsonPelicula.CalificacionId);
+                $("#cboSoporte").val(jsonPelicula.SoporteId);
+                $("#cboAlquilado").val(jsonPelicula.Alquilado == true ? 1 : 0);
+                $("#cboActiva").val(jsonPelicula.Activa == true ? 1 : 0);
+
+
+            }
+            $("#FormModal").modal("show");
+
+        }
+
+
     </script>
 }
+
+

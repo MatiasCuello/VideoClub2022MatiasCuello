@@ -84,7 +84,7 @@ namespace VideoClub.WebMVC.App_Start
 
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
-            kernel.Bind<VideoClubDbContext>().ToSelf().InSingletonScope();
+            kernel.Bind<VideoClubDbContext>().ToSelf().InThreadScope();
         }
     }
 }

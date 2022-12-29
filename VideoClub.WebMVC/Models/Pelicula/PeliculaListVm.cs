@@ -18,7 +18,7 @@ namespace VideoClub.WebMVC.Models.Pelicula
         public int GeneroId { get; set; }
 
         [DisplayName("Fecha")]
-        public DateTime FechaIncorporacion { get; set; } = DateTime.Now;
+        public string FechaIncorporacion { get; set; }
 
         [DisplayName("Estado")]
 
@@ -34,6 +34,11 @@ namespace VideoClub.WebMVC.Models.Pelicula
         public int SoporteId { get; set; }
         public bool Activa { get; set; } = true;
         public bool Alquilado { get; set; } = false;
+
+        public Entidades.Entidades.Calificacion Calificacion { get; set; }
+        public Entidades.Entidades.Genero Genero { get; set; }
+        public Entidades.Entidades.Soporte Soporte { get; set; }
+        public Entidades.Entidades.Estado Estado { get; set; }
 
 
     }

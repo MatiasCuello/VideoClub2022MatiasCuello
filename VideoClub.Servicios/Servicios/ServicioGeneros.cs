@@ -80,9 +80,9 @@ namespace VideoClub.Servicios.Servicios
             {
                 return repositorio.GetLista();
             }
-            catch (Exception e)
+            catch (Exception )
             {
-                throw new Exception(e.Message);
+                throw;
             }
         }
 

@@ -24,11 +24,11 @@ namespace VideoClub.Servicios.Servicios
 
         }
 
-        public List<Pelicula> GetLista(Calificacion calificacion, Estado estado, Genero genero, Soporte soporte)
+        public List<Pelicula> GetLista()
         {
             try
             {
-                return repositorio.GetLista(calificacion,estado,genero,soporte);
+                return repositorio.GetLista();
             }
             catch (Exception e)
             {

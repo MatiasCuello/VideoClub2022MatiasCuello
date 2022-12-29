@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using VideoClub.Servicios.Servicios.Facades;
 using VideoClub.WebMVC.App_Start;
+using VideoClub.WebMVC.Models.Pelicula;
 
 namespace VideoClub.WebMVC.Controllers
 {
@@ -37,8 +38,9 @@ namespace VideoClub.WebMVC.Controllers
         [HttpGet]
         public JsonResult ListarPeliculas()
         {
-            var lista = servicio.GetLista(null,null,null,null);
-            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+            var lista = servicio.GetLista();
+            var listaVm = mapper.Map<List<PeliculaListVm>>(lista);
+            return Json(new { data = listaVm }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -23,6 +23,13 @@ namespace VideoClub.WebMVC.Controllers
             this.servicio = servicio;
             mapper = AutoMapperConfig.Mapper;
         }
+
+        [HttpGet]
+        public JsonResult ListarGeneros()
+        {
+            var lista = servicio.GetLista();
+            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Index()
         {
             var lista = servicio.GetLista();

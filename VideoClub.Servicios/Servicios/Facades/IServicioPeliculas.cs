@@ -9,7 +9,7 @@ namespace VideoClub.Servicios.Servicios.Facades
 {
     public interface IServicioPeliculas
     {
-        List<Pelicula> GetLista(Calificacion calificacion, Estado estado, Genero genero, Soporte soporte);
+        List<Pelicula> GetLista();
         void Guardar(Pelicula pelicula);
         bool Existe(Pelicula pelicula);
         void Borrar(int peliculaId);

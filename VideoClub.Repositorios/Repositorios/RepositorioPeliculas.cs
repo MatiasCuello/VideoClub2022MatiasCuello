@@ -71,25 +71,30 @@ namespace VideoClub.Repositorios.Repositorios.Facades
             }
         }
 
-        public List<Pelicula> GetLista
-            (Calificacion calificacion=null, Estado estado=null, Genero genero=null, Soporte soporte=null)
+        public List<Pelicula> GetLista()
         {
             try
             {
-                var query = context.Peliculas
+                return context.Peliculas
                     .Include(p => p.Calificacion)
-                    .Include(p => p.Estado)
-                    .Include(p => p.Genero)
-                    .Include(p => p.Soporte);
+                        .Include(p => p.Estado)
+                        .Include(p => p.Genero)
+                        .Include(p => p.Soporte)
+                    .ToList();
+                //var query = context.Peliculas
+                //    .Include(p => p.Calificacion)
+                //    .Include(p => p.Estado)
+                //    .Include(p => p.Genero)
+                //    .Include(p => p.Soporte);
 
-                if (calificacion != null || estado != null || genero != null ||soporte != null)
-                {
-                    query = query.Where(p => p.CalificacionId == calificacion.CalificacionId);
-                    query = query.Where(p => p.EstadoId == estado.EstadoId);
-                    query = query.Where(p => p.GeneroId == genero.GeneroId);
-                    query = query.Where(p => p.SoporteId == soporte.SoporteId);
-                }
-                return query.AsNoTracking().ToList();
+                //if (calificacion != null || estado != null || genero != null ||soporte != null)
+                //{
+                //    query = query.Where(p => p.CalificacionId == calificacion.CalificacionId);
+                //    query = query.Where(p => p.EstadoId == estado.EstadoId);
+                //    query = query.Where(p => p.GeneroId == genero.GeneroId);
+                //    query = query.Where(p => p.SoporteId == soporte.SoporteId);
+                //}
+                //return query.AsNoTracking().ToList();
 
             }
             catch (Exception e)

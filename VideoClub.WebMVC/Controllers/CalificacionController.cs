@@ -24,11 +24,18 @@ namespace VideoClub.WebMVC.Controllers
             mapper = AutoMapperConfig.Mapper;
         }
 
+        [HttpGet]
+        public JsonResult ListarCalificaciones()
+        {
+            var lista = servicio.GetLista();
+            return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Index()
         {
             var lista = servicio.GetLista();
             return View(lista);
         }
+ 
         [HttpGet]
         public ActionResult Create()
         {
