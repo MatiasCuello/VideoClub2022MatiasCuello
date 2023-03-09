@@ -116,7 +116,7 @@
 {
     <script>
         var tablaPeliculas;
-        
+
 
         @*jQuery.ajax({
             url: "@Url.Action("ListarPeliculas", "Pelicula")",
@@ -136,6 +136,99 @@
             cargarCboSoportes();
             cargarCboCalificaciones();
         });
+
+        $("#tabla tbody").on("click",
+            '.btn-editar',
+            function () {
+                filaSeleccionada = $(this).closest("tr");
+                var datos = tablaPeliculas.row(filaSeleccionada).data();
+                abrirModal(datos);
+
+            });
+
+
+        function Guardar() {
+            var pelicula = {
+                PeliculaId: $("#txtPeliculaId").val(),
+                Titulo: $("#txtTitulo").val(),
+                GeneroId: $("#cboGenero option:selected").val(),
+                Genero: {
+                    GeneroId: $("#cboGenero option:selected").val(),
+                    Descripcion: $("#cboGenero option:selected").text()
+                },
+                EstadoId: $("#cboEstado option:selected").val(),
+                Estado: {
+                    EstadoId: $("#cboEstado option:selected").val(),
+                    Descripcion: $("#cboEstado option:selected").text()
+                },
+                Duracion: $("#txtDuracion").val(),
+                CalificacionId: $("#cboCalificacion option:selected").val(),
+                Calificacion: {
+                    CalificacionId: $("#cboCalificacion option:selected").val(),
+                    Descripcion: $("#cboCalificacion option:selected").text()
+                },
+                SoporteId: $("#cboSoporte option:selected").val(),
+                Soporte: {
+                    SoporteId: $("#cboSoporte option:selected").val(),
+                    Descripcion: $("#cboSoporte option:selected").text()
+                },
+                Alquilado: $("#cboAlquilado").val() == 1 ? true : false,
+                Activa: $("#cboActiva").val() == 1 ? true : false
+                }
+            };
+            console.log(pelicula);
+            debugger;
+            var request = new FormData();
+            request.append("objeto", JSON.stringify(pelicula));
+
+            jQuery.ajax({
+                url: "@Url.Action("GuardarPelicula", "Pelicula")",
+                type: "POST",
+                data: request,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $(".modal-body").LoadingOverlay("hide");
+
+                    if (pelicula.PeliculaId == 0) {
+                        debugger;
+                        if (data.resultado != 0) {
+                            pelicula.PeliculaId = data.resultado;
+                            tablaPeliculas.row.add(pelicula).draw(false);
+                            $("#FormModal").modal("hide");
+                        } else {
+                            $("#mensajeError").text(data.mensaje);
+                            $("#mensajeError").show();
+                        }
+
+                    } else {
+                        if (data.resultado != 0) {
+                            tablaPeliculas.row(filaSeleccionada).data(pelicula).draw(false);
+                            filaSeleccionada = null;
+                            $("#FormModal").modal('hide');
+
+                        } else {
+                            $("#mensajeError").text(data.mensaje);
+                            $("#mensajeError").show();
+                        }
+
+
+                    }
+
+                },
+                error: function(error) {
+
+                },
+                beforeSend: function() {
+                    $(".modal-body").LoadingOverlay("show",
+                        {
+                            imageResizeFactory: 2,
+                            text: "Guardando...",
+                            size: 14
+                        });
+
+                }
+            });
 
         function cargarTabla() {
             tablaPeliculas = $("#tabla").DataTable({
@@ -258,7 +351,7 @@
                         });
 
                 }
-            }); 
+            });
         }
 
         function cargarCboSoportes() {
@@ -305,9 +398,9 @@
                         });
 
                 }
-            }); 
+            });
             }
-    
+
         function abrirModal(jsonPelicula) {
 
             $("#mensajeError").hide();
@@ -337,6 +430,7 @@
             $("#FormModal").modal("show");
 
         }
+
 
 
     </script>
