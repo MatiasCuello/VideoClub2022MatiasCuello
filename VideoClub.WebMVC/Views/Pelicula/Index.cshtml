@@ -116,6 +116,7 @@
 {
     <script>
         var tablaPeliculas;
+        var filaSeleccionada;
 
 
         @*jQuery.ajax({
@@ -135,100 +136,20 @@
             cargarCboEstados();
             cargarCboSoportes();
             cargarCboCalificaciones();
+
+
+            $("#tabla tbody").on("click",
+                '.btn-editar',
+                function() {
+                    filaSeleccionada = $(this).closest("tr");
+                    var datos = tablaPeliculas.row(filaSeleccionada).data();
+                    abrirModal(datos);
+
+                });
+
+
         });
 
-        $("#tabla tbody").on("click",
-            '.btn-editar',
-            function () {
-                filaSeleccionada = $(this).closest("tr");
-                var datos = tablaPeliculas.row(filaSeleccionada).data();
-                abrirModal(datos);
-
-            });
-
-
-        function Guardar() {
-            var pelicula = {
-                PeliculaId: $("#txtPeliculaId").val(),
-                Titulo: $("#txtTitulo").val(),
-                GeneroId: $("#cboGenero option:selected").val(),
-                Genero: {
-                    GeneroId: $("#cboGenero option:selected").val(),
-                    Descripcion: $("#cboGenero option:selected").text()
-                },
-                EstadoId: $("#cboEstado option:selected").val(),
-                Estado: {
-                    EstadoId: $("#cboEstado option:selected").val(),
-                    Descripcion: $("#cboEstado option:selected").text()
-                },
-                Duracion: $("#txtDuracion").val(),
-                CalificacionId: $("#cboCalificacion option:selected").val(),
-                Calificacion: {
-                    CalificacionId: $("#cboCalificacion option:selected").val(),
-                    Descripcion: $("#cboCalificacion option:selected").text()
-                },
-                SoporteId: $("#cboSoporte option:selected").val(),
-                Soporte: {
-                    SoporteId: $("#cboSoporte option:selected").val(),
-                    Descripcion: $("#cboSoporte option:selected").text()
-                },
-                Alquilado: $("#cboAlquilado").val() == 1 ? true : false,
-                Activa: $("#cboActiva").val() == 1 ? true : false
-                }
-            };
-            console.log(pelicula);
-            debugger;
-            var request = new FormData();
-            request.append("objeto", JSON.stringify(pelicula));
-
-            jQuery.ajax({
-                url: "@Url.Action("GuardarPelicula", "Pelicula")",
-                type: "POST",
-                data: request,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $(".modal-body").LoadingOverlay("hide");
-
-                    if (pelicula.PeliculaId == 0) {
-                        debugger;
-                        if (data.resultado != 0) {
-                            pelicula.PeliculaId = data.resultado;
-                            tablaPeliculas.row.add(pelicula).draw(false);
-                            $("#FormModal").modal("hide");
-                        } else {
-                            $("#mensajeError").text(data.mensaje);
-                            $("#mensajeError").show();
-                        }
-
-                    } else {
-                        if (data.resultado != 0) {
-                            tablaPeliculas.row(filaSeleccionada).data(pelicula).draw(false);
-                            filaSeleccionada = null;
-                            $("#FormModal").modal('hide');
-
-                        } else {
-                            $("#mensajeError").text(data.mensaje);
-                            $("#mensajeError").show();
-                        }
-
-
-                    }
-
-                },
-                error: function(error) {
-
-                },
-                beforeSend: function() {
-                    $(".modal-body").LoadingOverlay("show",
-                        {
-                            imageResizeFactory: 2,
-                            text: "Guardando...",
-                            size: 14
-                        });
-
-                }
-            });
 
         function cargarTabla() {
             tablaPeliculas = $("#tabla").DataTable({
@@ -242,8 +163,7 @@
                 "columns": [
                     { "data": "Titulo" },
                     {
-                        "data": "Genero"
-                        ,
+                        "data": "Genero",
                         render: function(data) {
                             return data.Descripcion;
                         }
@@ -252,23 +172,20 @@
                         "data": "FechaIncorporacion"
                     },
                     {
-                        "data": "Estado"
-                        ,
+                        "data": "Estado",
                         render: function(data) {
                             return data.Descripcion;
                         }
                     },
                     { "data": "DuracionEnMinutos" },
                     {
-                        "data": "Calificacion"
-                        ,
+                        "data": "Calificacion",
                         render: function(data) {
                             return data.Descripcion;
                         }
                     },
                     {
-                        "data": "Soporte"
-                        ,
+                        "data": "Soporte",
                         render: function(data) {
                             return data.Descripcion;
                         }
@@ -337,12 +254,12 @@
                 type: "GET",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                success: function (estados) {
+                success: function(estados) {
                     console.log(estados);
                     debugger;
                     $("#cboEstado").append('<option disabled value="0">' + "Seleccionar" + '</option>');
                     $.each(estados.data,
-                        function (index, estado) {
+                        function(index, estado) {
                             $("#cboEstado").append('<option value="' +
                                 estado.EstadoId +
                                 '">' +
@@ -362,7 +279,7 @@
                 contentType: "application/json; charset=utf-8",
                 success: function(soportes) {
                     console.log(soportes);
-                   debugger;
+                    debugger;
                     $("#cboSoporte").append('<option disabled value="0">' + "Seleccionar" + '</option>');
                     $.each(soportes.data,
                         function(index, soporte) {
@@ -385,21 +302,22 @@
                 type: "GET",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                success: function (calificaciones) {
+                success: function(calificaciones) {
                     console.log(calificaciones);
                     debugger;
-                    $("#cboCalificacion").append('<option disabled value="0">'
-                        + "Seleccionar" + '</option>');
+                    $("#cboCalificacion").append('<option disabled value="0">' + "Seleccionar" + '</option>');
                     $.each(calificaciones.data,
-                        function (index, calificacion) {
+                        function(index, calificacion) {
                             $("#cboCalificacion").append('<option value="' +
-                                calificacion.CalificacionId + '">' +
-                                calificacion.Descripcion + '</option>');
+                                calificacion.CalificacionId +
+                                '">' +
+                                calificacion.Descripcion +
+                                '</option>');
                         });
 
                 }
             });
-            }
+        }
 
         function abrirModal(jsonPelicula) {
 
@@ -431,6 +349,89 @@
 
         }
 
+
+        function Guardar() {
+            var pelicula = {
+                PeliculaId: $("#txtPeliculaId").val(),
+                Titulo: $("#txtTitulo").val(),
+                GeneroId: $("#cboGenero option:selected").val(),
+                Genero: {
+                    GeneroId: $("#cboGenero option:selected").val(),
+                    Descripcion: $("#cboGenero option:selected").text()
+                },
+                EstadoId: $("#cboEstado option:selected").val(),
+                Estado: {
+                    EstadoId: $("#cboEstado option:selected").val(),
+                    Descripcion: $("#cboEstado option:selected").text()
+                },
+                Duracion: $("#txtDuracion").val(),
+                CalificacionId: $("#cboCalificacion option:selected").val(),
+                Calificacion: {
+                    CalificacionId: $("#cboCalificacion option:selected").val(),
+                    Descripcion: $("#cboCalificacion option:selected").text()
+                },
+                SoporteId: $("#cboSoporte option:selected").val(),
+                Soporte: {
+                    SoporteId: $("#cboSoporte option:selected").val(),
+                    Descripcion: $("#cboSoporte option:selected").text()
+                },
+                Alquilado: $("#cboAlquilado").val() == 1 ? true : false,
+                Activa: $("#cboActiva").val() == 1 ? true : false
+            };
+            console.log(pelicula);
+            debugger;
+            var request = new FormData();
+            request.append("objeto", JSON.stringify(pelicula));
+
+            jQuery.ajax({
+                url: "@Url.Action("GuardarPelicula", "Pelicula")",
+                type: "POST",
+                data: request,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                   /* $(".modal-body").LoadingOverlay("hide");*/
+
+                    if (pelicula.PeliculaId == 0) {
+                        debugger;
+                        if (data.resultado != 0) {
+                            pelicula.PeliculaId = data.resultado;
+                            tablaPeliculas.row.add(pelicula).draw(false);
+                            $("#FormModal").modal("hide");
+                        } else {
+                            $("#mensajeError").text(data.mensaje);
+                            $("#mensajeError").show();
+                        }
+
+                    } else {
+                        if (data.resultado != 0) {
+                            tablaPeliculas.row(filaSeleccionada).data(pelicula).draw(false);
+                            filaSeleccionada = null;
+                            $("#FormModal").modal('hide');
+
+                        } else {
+                            $("#mensajeError").text(data.mensaje);
+                            $("#mensajeError").show();
+                        }
+
+
+                    }
+
+                },
+                error: function (error) {
+
+                }/*,*/
+                //beforeSend: function () {
+                //    $(".modal-body").LoadingOverlay("show",
+                //        {
+                //            imageResizeFactory: 2,
+                //            text: "Guardando...",
+                //            size: 14
+                //        });
+
+                //}
+            });
+        }
 
 
     </script>

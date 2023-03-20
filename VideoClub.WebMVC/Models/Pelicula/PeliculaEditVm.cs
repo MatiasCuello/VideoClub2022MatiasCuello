@@ -21,7 +21,8 @@ namespace VideoClub.WebMVC.Models.Pelicula
 
         [DisplayName("Fecha")]
         [Required(ErrorMessage = "El campo {0} es requerido")]
-        public DateTime FechaIncorporacion { get; set; } = DateTime.Now;
+        
+        public DateTime FechaIncorporacion { get; set; } = DateTime.Now.Date;
 
         [DisplayName("Estado")]
         [Required(ErrorMessage = "El campo {0} es requerido")]

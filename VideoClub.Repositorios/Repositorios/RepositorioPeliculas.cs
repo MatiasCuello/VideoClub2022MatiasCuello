@@ -38,18 +38,17 @@ namespace VideoClub.Repositorios.Repositorios.Facades
             }
         }
 
-        //public bool EstaRelacionado(Pelicula pelicula)
-        //{
-        //    try
-        //    {
-        //        return context.Peliculas
-        //            .Any(p => p.PeliculaId == pelicula.PeliculaId);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception(e.Message);
-        //    }
-        //}
+        public bool EstaRelacionado(Pelicula pelicula)
+        {
+            try
+            {
+                return false;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public bool Existe(Pelicula pelicula)
         {

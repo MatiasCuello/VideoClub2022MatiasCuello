@@ -63,17 +63,10 @@ namespace VideoClub.Servicios.Servicios
             }
         }
 
-        //public bool EstaRelacionado(Pelicula pelicula)
-        //{
-        //    try
-        //    {
-        //        return repositorio.EstaRelacionado(pelicula);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception(e.Message);
-        //    }
-        //}
+        public bool EstaRelacionado(Pelicula pelicula)
+        {
+            return false;
+        }
 
         public bool Existe(Pelicula pelicula)
         {
