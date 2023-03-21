@@ -55,7 +55,24 @@ namespace VideoClub.WebMVC.Controllers
             {
                 Pelicula peliculaRecibida = new Pelicula();
                 peliculaRecibida = JsonConvert.DeserializeObject<Pelicula>(objeto);
+                //Pelicula peliculaAGuardar = new Pelicula()
+                //{
+                //    PeliculaId = peliculaRecibida.PeliculaId,
+                //    Titulo = peliculaRecibida.Titulo,
+                //    GeneroId = peliculaRecibida.GeneroId,
+                //    FechaIncorporacion = peliculaRecibida.FechaIncorporacion,
+                //    EstadoId = peliculaRecibida.EstadoId,
+                //    DuracionEnMinutos = peliculaRecibida.DuracionEnMinutos,
+                //    CalificacionId = peliculaRecibida.CalificacionId,
+                //    SoporteId = peliculaRecibida.SoporteId,
+                //    Alquilado = peliculaRecibida.Alquilado,
+                //    Activa = peliculaRecibida.Activa
 
+                //};
+
+
+
+                peliculaRecibida.FechaIncorporacion=DateTime.Now;
                 mensaje = ValidarPelicula(peliculaRecibida);
                 if (mensaje == String.Empty)
                 {
@@ -68,7 +85,7 @@ namespace VideoClub.WebMVC.Controllers
                     else
                     {
                         resultado = 0;
-                        mensaje = "Pelicula existente!!!";
+                        mensaje = "Pelicula repetida!";
                     }
                 }
                 else
@@ -112,6 +129,34 @@ namespace VideoClub.WebMVC.Controllers
             }
             return sb.ToString();
         }
+        //[HttpPost]
+        //public JsonResult EliminarPelicula(int id)
+        //{
+        //    bool respuesta = false;
+        //    string mensaje = string.Empty;
+        //    try
+        //    {
+        //        Pelicula p = servicio.GetPeliculaPorId(id);
+        //        if (!servicio.EstaRelacionada(c))
+        //        {
+        //            servicio.Borrar(p);
+        //            respuesta = true;
+        //            mensaje = "Pelicuka eliminada";
+        //        }
+        //        else
+        //        {
+        //            respuesta = false;
+        //            mensaje = "Pelicula relacionada... No se pudo eliminar el registro";
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        respuesta = false;
+        //        mensaje = e.Message;
+        //    }
+
+        //    return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
+        //}
 
     }
 }

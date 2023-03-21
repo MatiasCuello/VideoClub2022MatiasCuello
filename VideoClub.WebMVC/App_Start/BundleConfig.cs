@@ -14,7 +14,7 @@ namespace VideoClub.WebMVC
             bundles.Add(new Bundle("~/bundles/complementos").Include(
                 "~/Scripts/DataTables/jquery.dataTables.js",
                 "~/Scripts/DataTables/dataTables.responsive.js",
-                "~/Scripts/LoadingOverlay/loadingoverlay.min.js",
+                "~/Scripts/loadingoverlay.min.js",
                 "~/Scripts/sweetalert.min.js",
                 "~/Scripts/fontawesome/all.min.js",
                 "~/Scripts/scripts.js"

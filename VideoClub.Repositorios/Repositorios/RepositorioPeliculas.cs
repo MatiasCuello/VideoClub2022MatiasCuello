@@ -142,7 +142,7 @@ namespace VideoClub.Repositorios.Repositorios.Facades
                     peliculaInDb.SoporteId=pelicula.SoporteId;
                     peliculaInDb.Activa = pelicula.Activa;
 
-                    context.Entry(pelicula).State = EntityState.Modified;
+                    context.Entry(peliculaInDb).State = EntityState.Modified;
 
                 }
 

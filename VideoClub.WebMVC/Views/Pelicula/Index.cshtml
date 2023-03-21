@@ -118,20 +118,9 @@
         var tablaPeliculas;
         var filaSeleccionada;
 
-
-        @*jQuery.ajax({
-            url: "@Url.Action("ListarPeliculas", "Pelicula")",
-            type: "GET",
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function(data) {
-                debugger;
-                console.log(data);
-               }
-                });*@
-
         $(document).ready(function() {
             cargarTabla();
+            cargarCboEstados();
             cargarCboGeneros();
             cargarCboEstados();
             cargarCboSoportes();
@@ -355,31 +344,15 @@
                 PeliculaId: $("#txtPeliculaId").val(),
                 Titulo: $("#txtTitulo").val(),
                 GeneroId: $("#cboGenero option:selected").val(),
-                Genero: {
-                    GeneroId: $("#cboGenero option:selected").val(),
-                    Descripcion: $("#cboGenero option:selected").text()
-                },
                 EstadoId: $("#cboEstado option:selected").val(),
-                Estado: {
-                    EstadoId: $("#cboEstado option:selected").val(),
-                    Descripcion: $("#cboEstado option:selected").text()
-                },
-                Duracion: $("#txtDuracion").val(),
+                DuracionEnMinutos: $("#txtDuracion").val(),
                 CalificacionId: $("#cboCalificacion option:selected").val(),
-                Calificacion: {
-                    CalificacionId: $("#cboCalificacion option:selected").val(),
-                    Descripcion: $("#cboCalificacion option:selected").text()
-                },
                 SoporteId: $("#cboSoporte option:selected").val(),
-                Soporte: {
-                    SoporteId: $("#cboSoporte option:selected").val(),
-                    Descripcion: $("#cboSoporte option:selected").text()
-                },
                 Alquilado: $("#cboAlquilado").val() == 1 ? true : false,
                 Activa: $("#cboActiva").val() == 1 ? true : false
             };
-            console.log(pelicula);
-            debugger;
+            //console.log(pelicula);
+            //debugger;
             var request = new FormData();
             request.append("objeto", JSON.stringify(pelicula));
 
@@ -390,23 +363,27 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                   /* $(".modal-body").LoadingOverlay("hide");*/
+                    $(".modal-body").LoadingOverlay("hide");
 
                     if (pelicula.PeliculaId == 0) {
                         debugger;
                         if (data.resultado != 0) {
                             pelicula.PeliculaId = data.resultado;
                             tablaPeliculas.row.add(pelicula).draw(false);
+                            tablaPeliculas.ajax.reload();
                             $("#FormModal").modal("hide");
                         } else {
                             $("#mensajeError").text(data.mensaje);
                             $("#mensajeError").show();
+                           
                         }
 
                     } else {
                         if (data.resultado != 0) {
                             tablaPeliculas.row(filaSeleccionada).data(pelicula).draw(false);
                             filaSeleccionada = null;
+                             tablaPeliculas.ajax.reload();
+
                             $("#FormModal").modal('hide');
 
                         } else {
@@ -416,20 +393,27 @@
 
 
                     }
+                    
 
                 },
                 error: function (error) {
 
-                }/*,*/
-                //beforeSend: function () {
-                //    $(".modal-body").LoadingOverlay("show",
-                //        {
-                //            imageResizeFactory: 2,
-                //            text: "Guardando...",
-                //            size: 14
-                //        });
+                },
+                beforeSend: function () {
+                    $(".modal-body").LoadingOverlay("show",
+                        {
+                            imageResizeFactory: 2,
+                            text: "Guardando...",
+                            size: 14
+                            
+                        });
 
-                //}
+
+
+                }
+                
+                
+                
             });
         }
 
